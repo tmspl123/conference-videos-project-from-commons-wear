@@ -1,0 +1,20 @@
+<resources>
+  <string name="app_name">Storage Explorer</string>
+  <string name="title_internal_files">Internal Files</string>
+  <string name="title_external_files">External Files</string>
+  <string name="title_external_cache">External Cache</string>
+  <string name="title_external_music">External Music</string>
+  <string name="title_external_images">External Images</string>
+  <string name="title_external_videos">External Videos</string>
+  <string name="title_external_downloads">External Downloads</string>
+  <string name="title_external_documents">External Documents</string>
+  <string name="title_media_music">Music Media</string>
+  <string name="title_media_images">Image Media</string>
+  <string name="title_media_videos">Video Media</string>
+  <string name="title_media_files">File Media</string>
+  <string name="no_permission">We did not receive permission, so cannot proceed!</string>
+  <string name="row_content">%s (%s)</string>
+  <string name="menu_request_role">Request Role</string>
+  <string name="menu_create">Create</string>
+  <string name="menu_refresh">Refresh</string>
+</resources>
