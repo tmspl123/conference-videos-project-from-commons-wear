@@ -16,7 +16,6 @@
 
 package com.commonsware.android.storage
 
-import android.Manifest
 import android.annotation.TargetApi
 import android.app.Activity
 import android.app.role.RoleManager
@@ -39,8 +38,11 @@ private const val ASSET_VIDEO = "sample.mp4"
 private const val REQUEST_ROLE = 1337
 
 class MainActivity : AbstractPermissionActivity() {
-  override val desiredPermissions =
-    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+  override val desiredPermissions: Array<String> by lazy {
+    resources.getStringArray(
+      R.array.permissions
+    )
+  }
   private val roleManager: RoleManager
       by lazy { getSystemService(RoleManager::class.java) }
   private val viewModel: TopViewModel by viewModel()
@@ -67,7 +69,7 @@ class MainActivity : AbstractPermissionActivity() {
     return super.onCreateOptionsMenu(menu)
   }
 
-  @TargetApi(Build.VERSION_CODES.P)
+  @TargetApi(Build.VERSION_CODES.Q)
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when {
       item.itemId == R.id.requestRole -> {
@@ -83,7 +85,7 @@ class MainActivity : AbstractPermissionActivity() {
     return super.onOptionsItemSelected(item)
   }
 
-  @TargetApi(Build.VERSION_CODES.P)
+  @TargetApi(Build.VERSION_CODES.Q)
   override fun onActivityResult(
     requestCode: Int,
     resultCode: Int,
@@ -95,6 +97,7 @@ class MainActivity : AbstractPermissionActivity() {
     }
   }
 
+  @TargetApi(Build.VERSION_CODES.Q)
   private fun allowRoleRequest() = resources.getBoolean(R.bool.isQ)
       && BuildConfig.ROLE != null
       && roleManager.isRoleAvailable(BuildConfig.ROLE)

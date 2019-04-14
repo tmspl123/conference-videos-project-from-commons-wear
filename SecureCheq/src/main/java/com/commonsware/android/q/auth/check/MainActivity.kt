@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
       .setDescription("This is the description")
       .setSubtitle("This is the subtitle")
       .setRequireConfirmation(true)
-      .setEnableFallback(true)
+      .setAllowDeviceCredential(true)
       .build()
 
     fingerprint.apply {

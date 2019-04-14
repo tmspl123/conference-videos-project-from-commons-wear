@@ -28,6 +28,7 @@ import android.os.CancellationSignal
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.os.BuildCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -63,8 +64,8 @@ class MainActivity : AppCompatActivity() {
       .setDescription("This is the description")
       .setSubtitle("This is the subtitle")
       .apply {
-        if (resources.getBoolean(R.bool.isQ)) {
-          setEnableFallback(true)
+        if (BuildCompat.isAtLeastQ()) {
+          setAllowDeviceCredential(true)
         } else {
           setNegativeButton(
             "Ick!",

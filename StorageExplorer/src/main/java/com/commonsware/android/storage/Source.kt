@@ -75,21 +75,24 @@ class ContentSource(
   ) {
     withContext(Dispatchers.IO) {
       val child = root.createFile(mimeType, name)
-      val uri = child!!.uri
 
-      ctxt.contentResolver.openOutputStream(uri).use {
-        creator(
-          it!!
-        )
-      }
+      child?.let {
+        val uri = child.uri
 
-      if (uri.scheme == ContentResolver.SCHEME_FILE) {
-        MediaScannerConnection.scanFile(
-          ctxt,
-          arrayOf(uri.path),
-          arrayOf(mimeType),
-          null
-        )
+        ctxt.contentResolver.openOutputStream(uri).use {
+          creator(
+            it!!
+          )
+        }
+
+        if (uri.scheme == ContentResolver.SCHEME_FILE) {
+          MediaScannerConnection.scanFile(
+            ctxt,
+            arrayOf(uri.path),
+            arrayOf(mimeType),
+            null
+          )
+        }
       }
     }
   }
@@ -114,8 +117,8 @@ class MediaSource(
           generateSequence { if (cursor.moveToNext()) cursor else null }
             .map {
               StorageItem(
-                it.getString(nameColumn),
-                it.getString(typeColumn)
+                it.getString(nameColumn) ?: "Name not provided",
+                it.getString(typeColumn) ?: "unknown"
               )
             }
             .toList()

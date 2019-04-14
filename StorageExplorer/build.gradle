@@ -47,6 +47,15 @@ android {
             buildConfigField "boolean", "REQUEST_RUNTIME_PERMISSIONS", "false"
             buildConfigField "String", "ROLE", "android.app.role.RoleManager.ROLE_GALLERY"
         }
+
+        qperm {
+            dimension "scenario"
+            applicationId "com.commonsware.android.storage.qperm"
+            minSdkVersion "Q"
+            targetSdkVersion "Q"
+            buildConfigField "boolean", "REQUEST_RUNTIME_PERMISSIONS", "true"
+            buildConfigField "String", "ROLE", "null"
+        }
     }
 }
 
