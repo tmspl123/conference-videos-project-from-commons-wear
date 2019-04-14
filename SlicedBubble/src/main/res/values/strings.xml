@@ -1,0 +1,9 @@
+<resources>
+  <string name="app_name">Q Slice Bubble Demo</string>
+  <string name="show_bubble">Show Bubble</string>
+  <string name="cancel_notification">Cancel Notification</string>
+  <string name="show_bubble_now">Show Bubble Now</string>
+  <string name="launch_adjacent">Launch Adjacent</string>
+  <string name="header_title">Slice and Dice</string>
+  <string name="roll">Roll</string>
+</resources>
