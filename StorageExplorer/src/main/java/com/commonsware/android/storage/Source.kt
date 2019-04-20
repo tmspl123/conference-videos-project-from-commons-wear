@@ -29,6 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.OutputStream
+import java.lang.UnsupportedOperationException
 
 data class StorageItem(
   val displayName: String,
@@ -42,6 +43,8 @@ interface IStorageSource {
     mimeType: String,
     creator: (OutputStream) -> Unit
   )
+  val supportsDirectory: Boolean
+  suspend fun createDirectory(name: String)
 }
 
 class ContentSource(
@@ -62,10 +65,16 @@ class ContentSource(
       )
   }
 
+  override val supportsDirectory = true
+
   override suspend fun listItems(): List<StorageItem> =
     withContext(Dispatchers.IO) {
       root.listFiles()
-        .map { StorageItem(it.name.orEmpty(), it.type) }
+        .map {
+          val type = if (it.isDirectory) "directory" else it.type
+
+          StorageItem(it.name.orEmpty(), type)
+        }
     }
 
   override suspend fun create(
@@ -96,6 +105,12 @@ class ContentSource(
       }
     }
   }
+
+  override suspend fun createDirectory(name: String) {
+    withContext(Dispatchers.IO) {
+      root.createDirectory(name)
+    }
+  }
 }
 
 class MediaSource(
@@ -103,6 +118,8 @@ class MediaSource(
   private val root: Uri,
   private val resolver: ContentResolver
 ) : IStorageSource {
+  override val supportsDirectory = false
+
   override suspend fun listItems(): List<StorageItem> {
     return withContext(Dispatchers.IO) {
       val cursor = resolver.query(root, null, null, null, null)
@@ -147,5 +164,9 @@ class MediaSource(
         )
       }
     }
+  }
+
+  override suspend fun createDirectory(name: String) {
+    throw UnsupportedOperationException("how did you get here?")
   }
 }

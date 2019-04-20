@@ -24,11 +24,17 @@ enum class StorageScenario {
   INTERNAL_FILES,
   EXTERNAL_FILES,
   EXTERNAL_CACHE,
+  EXTERNAL_ROOT,
   EXTERNAL_MUSIC,
   EXTERNAL_IMAGES,
   EXTERNAL_VIDEOS,
-  EXTERNAL_DOWNLOADS,
+  EXTERNAL_ALARMS,
+  EXTERNAL_DCIM,
   EXTERNAL_DOCUMENTS,
+  EXTERNAL_DOWNLOADS,
+  EXTERNAL_NOTIFICATIONS,
+  EXTERNAL_PODCASTS,
+  EXTERNAL_RINGTONES,
   MEDIA_MUSIC,
   MEDIA_IMAGES,
   MEDIA_VIDEOS,
@@ -48,6 +54,10 @@ class StorageRepository(val ctxt: Context) {
       ctxt,
       ctxt.externalCacheDir!!
     )
+    StorageScenario.EXTERNAL_ROOT -> ContentSource.on(
+      ctxt,
+      Environment.getExternalStorageDirectory()
+    )
     StorageScenario.EXTERNAL_MUSIC -> ContentSource.onPublic(
       ctxt,
       Environment.DIRECTORY_MUSIC
@@ -60,6 +70,14 @@ class StorageRepository(val ctxt: Context) {
       ctxt,
       Environment.DIRECTORY_MOVIES
     )
+    StorageScenario.EXTERNAL_ALARMS -> ContentSource.onPublic(
+      ctxt,
+      Environment.DIRECTORY_ALARMS
+    )
+    StorageScenario.EXTERNAL_DCIM -> ContentSource.onPublic(
+      ctxt,
+      Environment.DIRECTORY_DCIM
+    )
     StorageScenario.EXTERNAL_DOWNLOADS -> ContentSource.onPublic(
       ctxt,
       Environment.DIRECTORY_DOWNLOADS
@@ -67,6 +85,18 @@ class StorageRepository(val ctxt: Context) {
     StorageScenario.EXTERNAL_DOCUMENTS -> ContentSource.onPublic(
       ctxt,
       Environment.DIRECTORY_DOCUMENTS
+    )
+    StorageScenario.EXTERNAL_NOTIFICATIONS -> ContentSource.onPublic(
+      ctxt,
+      Environment.DIRECTORY_NOTIFICATIONS
+    )
+    StorageScenario.EXTERNAL_PODCASTS -> ContentSource.onPublic(
+      ctxt,
+      Environment.DIRECTORY_PODCASTS
+    )
+    StorageScenario.EXTERNAL_RINGTONES -> ContentSource.onPublic(
+      ctxt,
+      Environment.DIRECTORY_RINGTONES
     )
     StorageScenario.MEDIA_MUSIC -> MediaSource(
       ctxt,

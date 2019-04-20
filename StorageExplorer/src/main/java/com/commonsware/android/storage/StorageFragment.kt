@@ -57,6 +57,7 @@ class StorageFragment : Fragment() {
 
   private val motor: StorageMotor by viewModel { parametersOf(arguments!!.scenario) }
   private val topViewModel: TopViewModel by sharedViewModel()
+  private var folderItem: MenuItem? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -66,22 +67,27 @@ class StorageFragment : Fragment() {
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.page_actions, menu)
+    folderItem = menu.findItem(R.id.createFolder)
+    folderItem?.isVisible = motor.states.value?.supportsDirectory ?: false
 
     return super.onCreateOptionsMenu(menu, inflater)
   }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if (item.itemId == R.id.create) {
+  override fun onOptionsItemSelected(item: MenuItem) = when {
+    item.itemId == R.id.create -> {
       motor.create(
         UUID.randomUUID().toString(),
         arguments!!.createAsset,
         arguments!!.mimeType
       )
 
-      return true
+      true
     }
-
-    return super.onOptionsItemSelected(item)
+    item.itemId == R.id.createFolder -> {
+      motor.createDirectory(UUID.randomUUID().toString())
+      true
+    }
+    else -> super.onOptionsItemSelected(item)
   }
 
   override fun onCreateView(
@@ -101,6 +107,7 @@ class StorageFragment : Fragment() {
 
     motor.states.observe(this) { state ->
       adapter.submitList(state.items)
+      folderItem?.isVisible = state.supportsDirectory
     }
 
     topViewModel.refreshEvents.observe(this) { event ->

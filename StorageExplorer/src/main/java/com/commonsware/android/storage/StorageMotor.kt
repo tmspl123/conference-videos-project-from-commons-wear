@@ -28,7 +28,10 @@ class StorageMotor(
   private val ctxt: Context,
   private val source: IStorageSource
 ) : ViewModel() {
-  data class ViewState(val items: List<StorageItem> = listOf())
+  data class ViewState(
+    val items: List<StorageItem> = listOf(),
+    val supportsDirectory: Boolean = false
+  )
 
   private val _states =
     MutableLiveData<ViewState>().apply { value = ViewState() }
@@ -48,6 +51,14 @@ class StorageMotor(
     }
   }
 
+  fun createDirectory(name: String) {
+    viewModelScope.launch(Dispatchers.Main) {
+      source.createDirectory(name)
+
+      refreshImpl()
+    }
+  }
+
   fun refresh() {
     viewModelScope.launch(Dispatchers.Main) {
       refreshImpl()
@@ -56,6 +67,9 @@ class StorageMotor(
 
   private suspend fun refreshImpl() {
     _states.value =
-      _states.value!!.copy(items = source.listItems().sortedBy { it.displayName })
+      _states.value!!.copy(
+        items = source.listItems().sortedBy { it.displayName },
+        supportsDirectory = source.supportsDirectory
+      )
   }
 }

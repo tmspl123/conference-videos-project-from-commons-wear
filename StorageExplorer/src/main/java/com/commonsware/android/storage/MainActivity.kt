@@ -108,11 +108,17 @@ private val TITLES = listOf(
   R.string.title_internal_files,
   R.string.title_external_files,
   R.string.title_external_cache,
+  R.string.title_external_root,
   R.string.title_external_music,
   R.string.title_external_images,
   R.string.title_external_videos,
   R.string.title_external_downloads,
   R.string.title_external_documents,
+  R.string.title_external_alarms,
+  R.string.title_external_dcim,
+  R.string.title_external_notifications,
+  R.string.title_external_podcasts,
+  R.string.title_external_ringtones,
   R.string.title_media_music,
   R.string.title_media_images,
   R.string.title_media_videos,
@@ -127,7 +133,7 @@ private const val MIME_TYPE_VIDEO = "video/mp4"
 private class Pages(private val ctxt: Context, fm: FragmentManager) :
   FragmentPagerAdapter(fm) {
 
-  override fun getCount() = 12
+  override fun getCount() = 18
 
   override fun getItem(position: Int) = when (position) {
     0 -> StorageFragment(
@@ -146,41 +152,76 @@ private class Pages(private val ctxt: Context, fm: FragmentManager) :
       MIME_TYPE_TEXT
     )
     3 -> StorageFragment(
+      StorageScenario.EXTERNAL_ROOT,
+      ASSET_TEXT,
+      MIME_TYPE_TEXT
+    )
+    4 -> StorageFragment(
       StorageScenario.EXTERNAL_MUSIC,
       ASSET_AUDIO,
       MIME_TYPE_AUDIO
     )
-    4 -> StorageFragment(
+    5 -> StorageFragment(
       StorageScenario.EXTERNAL_IMAGES,
       ASSET_IMAGE,
       MIME_TYPE_IMAGE
     )
-    5 -> StorageFragment(
+    6 -> StorageFragment(
       StorageScenario.EXTERNAL_VIDEOS,
       ASSET_VIDEO,
       MIME_TYPE_VIDEO
     )
-    6 -> StorageFragment(
+    7 -> StorageFragment(
       StorageScenario.EXTERNAL_DOWNLOADS,
       ASSET_TEXT,
       MIME_TYPE_TEXT
     )
-    7 -> StorageFragment(
+    8 -> StorageFragment(
       StorageScenario.EXTERNAL_DOCUMENTS,
       ASSET_TEXT,
       MIME_TYPE_TEXT
     )
-    8 -> StorageFragment(
+    9 -> StorageFragment(
+      StorageScenario.EXTERNAL_ALARMS,
+      ASSET_TEXT,
+      MIME_TYPE_TEXT
+    )
+    10 -> StorageFragment(
+      StorageScenario.EXTERNAL_DCIM,
+      ASSET_TEXT,
+      MIME_TYPE_TEXT
+    )
+    11 -> StorageFragment(
+      StorageScenario.EXTERNAL_NOTIFICATIONS,
+      ASSET_TEXT,
+      MIME_TYPE_TEXT
+    )
+    12 -> StorageFragment(
+      StorageScenario.EXTERNAL_PODCASTS,
+      ASSET_TEXT,
+      MIME_TYPE_TEXT
+    )
+    13 -> StorageFragment(
+      StorageScenario.EXTERNAL_RINGTONES,
+      ASSET_TEXT,
+      MIME_TYPE_TEXT
+    )
+    14 -> StorageFragment(
+      StorageScenario.EXTERNAL_DOCUMENTS,
+      ASSET_TEXT,
+      MIME_TYPE_TEXT
+    )
+    15 -> StorageFragment(
       StorageScenario.MEDIA_MUSIC,
       ASSET_AUDIO,
       MIME_TYPE_AUDIO
     )
-    9 -> StorageFragment(
+    16 -> StorageFragment(
       StorageScenario.MEDIA_IMAGES,
       ASSET_IMAGE,
       MIME_TYPE_IMAGE
     )
-    10 -> StorageFragment(
+    17 -> StorageFragment(
       StorageScenario.MEDIA_VIDEOS,
       ASSET_VIDEO,
       MIME_TYPE_VIDEO

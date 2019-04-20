@@ -56,6 +56,22 @@ android {
             buildConfigField "boolean", "REQUEST_RUNTIME_PERMISSIONS", "true"
             buildConfigField "String", "ROLE", "null"
         }
+
+        qnoperm {
+            dimension "scenario"
+            applicationId "com.commonsware.android.storage.qnoperm"
+            minSdkVersion "Q"
+            targetSdkVersion "Q"
+            buildConfigField "boolean", "REQUEST_RUNTIME_PERMISSIONS", "false"
+            buildConfigField "String", "ROLE", "null"
+        }
+
+        noperm {
+            dimension "scenario"
+            applicationId "com.commonsware.android.storage.noperm"
+            buildConfigField "boolean", "REQUEST_RUNTIME_PERMISSIONS", "false"
+            buildConfigField "String", "ROLE", "null"
+        }
     }
 }
 

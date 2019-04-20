@@ -3,11 +3,17 @@
   <string name="title_internal_files">Internal Files</string>
   <string name="title_external_files">External Files</string>
   <string name="title_external_cache">External Cache</string>
+  <string name="title_external_root">External Root</string>
   <string name="title_external_music">External Music</string>
   <string name="title_external_images">External Images</string>
   <string name="title_external_videos">External Videos</string>
   <string name="title_external_downloads">External Downloads</string>
   <string name="title_external_documents">External Documents</string>
+  <string name="title_external_alarms">External Alarms</string>
+  <string name="title_external_dcim">External DCIM</string>
+  <string name="title_external_notifications">External Notifications</string>
+  <string name="title_external_podcasts">External Podcasts</string>
+  <string name="title_external_ringtones">External Ringtones</string>
   <string name="title_media_music">Music Media</string>
   <string name="title_media_images">Image Media</string>
   <string name="title_media_videos">Video Media</string>
@@ -17,4 +23,5 @@
   <string name="menu_request_role">Request Role</string>
   <string name="menu_create">Create</string>
   <string name="menu_refresh">Refresh</string>
+  <string name="menu_create_folder">Create Folder</string>
 </resources>

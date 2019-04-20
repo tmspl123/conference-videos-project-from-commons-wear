@@ -7,4 +7,10 @@
     android:icon="@drawable/ic_add_circle_outline_black_24dp"
     android:title="@string/menu_create"
     app:showAsAction="ifRoom" />
+  <item
+    android:id="@+id/createFolder"
+    android:icon="@drawable/ic_create_new_folder_black_24dp"
+    android:title="@string/menu_create_folder"
+    android:visible="false"
+    app:showAsAction="ifRoom" />
 </menu>
