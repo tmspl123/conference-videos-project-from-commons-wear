@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <item
+    android:id="@+id/openImage"
+    android:icon="@drawable/ic_folder_open_black_24dp"
+    android:title="@string/menu_open"
+    app:showAsAction="ifRoom|withText" />
+
+  <item
+    android:id="@+id/openMedia"
+    android:icon="@drawable/ic_image_black_24dp"
+    android:title="@string/menu_media"
+    app:showAsAction="ifRoom|withText" />
+
+  <item
+    android:id="@+id/requireOriginal"
+    android:checkable="true"
+    android:checked="false"
+    android:enabled="@bool/isQ"
+    android:title="@string/menu_require_original"
+    app:showAsAction="never" />
+
+  <item
+    android:id="@+id/countGeotags"
+    android:title="@string/menu_count_geotags"
+    app:showAsAction="never" />
+</menu>

@@ -1,0 +1,5 @@
+<resources>
+  <string name="app_name">ConferenceVideos</string>
+  <string name="icon">Icon</string>
+  <string name="msg_toast">Sorry, but we need permission to continue!</string>
+</resources>

@@ -1,0 +1,7 @@
+<resources>
+  <string name="app_name">LocationForeground</string>
+  <string name="latitude">Latitude:</string>
+  <string name="longitude">Longitude:</string>
+  <string name="time">Time:</string>
+  <string name="notif_text">Logging locations!</string>
+</resources>
