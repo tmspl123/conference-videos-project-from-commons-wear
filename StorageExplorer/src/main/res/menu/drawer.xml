@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:showIn="navigation_view">
+
+  <group android:checkableBehavior="single">
+    <item
+      android:id="@+id/nav_internal_files"
+      android:checked="true"
+      android:title="@string/title_internal_files" />
+    <item
+      android:id="@+id/nav_external_files"
+      android:title="@string/title_external_files" />
+    <item
+      android:id="@+id/nav_external_cache"
+      android:title="@string/title_external_cache" />
+    <item
+      android:id="@+id/nav_external_root"
+      android:title="@string/title_external_root" />
+    <item
+      android:id="@+id/nav_external_music"
+      android:title="@string/title_external_music" />
+    <item
+      android:id="@+id/nav_external_images"
+      android:title="@string/title_external_images" />
+    <item
+      android:id="@+id/nav_external_videos"
+      android:title="@string/title_external_videos" />
+    <item
+      android:id="@+id/nav_external_downloads"
+      android:title="@string/title_external_downloads" />
+    <item
+      android:id="@+id/nav_external_documents"
+      android:title="@string/title_external_documents" />
+    <item
+      android:id="@+id/nav_external_alarms"
+      android:title="@string/title_external_alarms" />
+    <item
+      android:id="@+id/nav_external_dcim"
+      android:title="@string/title_external_dcim" />
+    <item
+      android:id="@+id/nav_external_notifications"
+      android:title="@string/title_external_notifications" />
+    <item
+      android:id="@+id/nav_external_podcasts"
+      android:title="@string/title_external_podcasts" />
+    <item
+      android:id="@+id/nav_external_ringtones"
+      android:title="@string/title_external_ringtones" />
+    <item
+      android:id="@+id/nav_media_music"
+      android:title="@string/title_media_music" />
+    <item
+      android:id="@+id/nav_media_images"
+      android:title="@string/title_media_images" />
+    <item
+      android:id="@+id/nav_media_videos"
+      android:title="@string/title_media_videos" />
+    <item
+      android:id="@+id/nav_media_files"
+      android:title="@string/title_media_files" />
+  </group>
+</menu>

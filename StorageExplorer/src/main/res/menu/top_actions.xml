@@ -8,7 +8,11 @@
     android:title="@string/menu_refresh"
     app:showAsAction="ifRoom" />
   <item
-    android:id="@+id/requestRole"
-    android:title="@string/menu_request_role"
+    android:id="@+id/openDoc"
+    android:title="@string/menu_open_doc"
+    app:showAsAction="never" />
+  <item
+    android:id="@+id/openTree"
+    android:title="@string/menu_open_tree"
     app:showAsAction="never" />
 </menu>

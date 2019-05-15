@@ -21,56 +21,43 @@ android {
         }
     }
 
-    flavorDimensions "scenario"
+    flavorDimensions "target", "perm", "sandbox"
 
     productFlavors {
-        legacy {
-            dimension "scenario"
+        p {
+            dimension "target"
+            applicationIdSuffix ".p"
+        }
+
+        q {
+            dimension "target"
+            applicationIdSuffix ".q"
+            minSdkVersion "Q"
+            targetSdkVersion "Q"
+        }
+
+        perm {
+            dimension "perm"
+            applicationIdSuffix ".perm"
             buildConfigField "boolean", "REQUEST_RUNTIME_PERMISSIONS", "true"
-            buildConfigField "String", "ROLE", "null"
-        }
-
-        qmusic {
-            dimension "scenario"
-            applicationId "com.commonsware.android.storage.qmusic"
-            minSdkVersion "Q"
-            targetSdkVersion "Q"
-            buildConfigField "boolean", "REQUEST_RUNTIME_PERMISSIONS", "false"
-            buildConfigField "String", "ROLE", "android.app.role.RoleManager.ROLE_MUSIC"
-        }
-
-        qgallery {
-            dimension "scenario"
-            applicationId "com.commonsware.android.storage.qgallery"
-            minSdkVersion "Q"
-            targetSdkVersion "Q"
-            buildConfigField "boolean", "REQUEST_RUNTIME_PERMISSIONS", "false"
-            buildConfigField "String", "ROLE", "android.app.role.RoleManager.ROLE_GALLERY"
-        }
-
-        qperm {
-            dimension "scenario"
-            applicationId "com.commonsware.android.storage.qperm"
-            minSdkVersion "Q"
-            targetSdkVersion "Q"
-            buildConfigField "boolean", "REQUEST_RUNTIME_PERMISSIONS", "true"
-            buildConfigField "String", "ROLE", "null"
-        }
-
-        qnoperm {
-            dimension "scenario"
-            applicationId "com.commonsware.android.storage.qnoperm"
-            minSdkVersion "Q"
-            targetSdkVersion "Q"
-            buildConfigField "boolean", "REQUEST_RUNTIME_PERMISSIONS", "false"
-            buildConfigField "String", "ROLE", "null"
         }
 
         noperm {
-            dimension "scenario"
-            applicationId "com.commonsware.android.storage.noperm"
+            dimension "perm"
+            applicationIdSuffix ".noperm"
             buildConfigField "boolean", "REQUEST_RUNTIME_PERMISSIONS", "false"
-            buildConfigField "String", "ROLE", "null"
+        }
+
+        sandbox {
+            dimension "sandbox"
+            applicationIdSuffix ".sandbox"
+            resValue "bool", "useSandbox", "true"
+        }
+
+        normal {
+            dimension "sandbox"
+            applicationIdSuffix ".normal"
+            resValue "bool", "useSandbox", "false"
         }
     }
 }
@@ -83,8 +70,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
-    implementation "androidx.viewpager:viewpager:$viewpager_version"
+    implementation "androidx.fragment:fragment-ktx:1.0.0"
     implementation "org.koin:koin-core:$koin_version"
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    implementation 'com.google.android.material:material:1.0.0'
 }

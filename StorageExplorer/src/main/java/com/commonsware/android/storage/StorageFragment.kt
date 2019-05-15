@@ -22,6 +22,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.*
+import kotlinx.android.synthetic.main.fragment_storage.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -98,12 +99,11 @@ class StorageFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     val adapter = Adapter(layoutInflater)
-    val rv = view as RecyclerView
     val manager = LinearLayoutManager(activity)
 
-    rv.layoutManager = manager
-    rv.addItemDecoration(DividerItemDecoration(activity, manager.orientation))
-    rv.adapter = adapter
+    items.layoutManager = manager
+    items.addItemDecoration(DividerItemDecoration(activity, manager.orientation))
+    items.adapter = adapter
 
     motor.states.observe(this) { state ->
       adapter.submitList(state.items)
@@ -113,6 +113,8 @@ class StorageFragment : Fragment() {
     topViewModel.refreshEvents.observe(this) { event ->
       event.handle { motor.refresh() }
     }
+
+    location.text = arguments?.scenario?.name
   }
 
   class Adapter(private val inflater: LayoutInflater) :

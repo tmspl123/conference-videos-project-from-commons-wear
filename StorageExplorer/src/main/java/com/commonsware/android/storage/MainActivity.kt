@@ -18,16 +18,23 @@ package com.commonsware.android.storage
 
 import android.annotation.TargetApi
 import android.app.Activity
-import android.app.role.RoleManager
-import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.os.BuildCompat
+import androidx.core.view.GravityCompat
+import androidx.documentfile.provider.DocumentFile
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.transaction
+import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -35,7 +42,12 @@ private const val ASSET_TEXT = "sample.txt"
 private const val ASSET_AUDIO = "sample.mp3"
 private const val ASSET_IMAGE = "sample.png"
 private const val ASSET_VIDEO = "sample.mp4"
-private const val REQUEST_ROLE = 1337
+private const val MIME_TYPE_TEXT = "text/plain"
+private const val MIME_TYPE_AUDIO = "audio/mpeg"
+private const val MIME_TYPE_IMAGE = "image/png"
+private const val MIME_TYPE_VIDEO = "video/mp4"
+private const val REQUEST_DOC = 1338
+private const val REQUEST_TREE = 1339
 
 class MainActivity : AbstractPermissionActivity() {
   override val desiredPermissions: Array<String> by lazy {
@@ -43,16 +55,44 @@ class MainActivity : AbstractPermissionActivity() {
       R.array.permissions
     )
   }
-  private val roleManager: RoleManager
-      by lazy { getSystemService(RoleManager::class.java) }
   private val viewModel: TopViewModel by viewModel()
-  private var menuRequestRole: MenuItem? = null
+  private val fragments = mapOf<Int, Fragment>()
+  private val tag by lazy { getString(R.string.app_name) }
 
   override fun onReady(state: Bundle?) {
     setContentView(R.layout.activity_main)
 
-    pager.adapter = Pages(this, supportFragmentManager)
     setSupportActionBar(toolbar)
+
+    title =
+      BuildConfig.APPLICATION_ID.removePrefix("com.commonsware.android.storage.")
+
+    val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+    val navView: NavigationView = findViewById(R.id.nav_view)
+    val toggle = ActionBarDrawerToggle(
+      this,
+      drawerLayout,
+      toolbar,
+      R.string.navigation_drawer_open,
+      R.string.navigation_drawer_close
+    )
+    drawerLayout.addDrawerListener(toggle)
+    toggle.syncState()
+
+    navView.setNavigationItemSelectedListener { item ->
+      navTo(item.itemId)
+      drawer_layout.closeDrawer(GravityCompat.START)
+      true
+    }
+
+    navTo(R.id.nav_internal_files)
+
+    val msg =
+      if (BuildCompat.isAtLeastQ() && Environment.isExternalStorageSandboxed())
+        "This app has sandboxed external storage"
+      else "This app has normal external storage"
+
+    Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
   }
 
   override fun onPermissionDenied() {
@@ -63,23 +103,23 @@ class MainActivity : AbstractPermissionActivity() {
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     menuInflater.inflate(R.menu.top_actions, menu)
 
-    menuRequestRole = menu.findItem(R.id.requestRole)
-    menuRequestRole?.isEnabled = allowRoleRequest()
-
     return super.onCreateOptionsMenu(menu)
   }
 
   @TargetApi(Build.VERSION_CODES.Q)
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when {
-      item.itemId == R.id.requestRole -> {
-        startActivityForResult(
-          roleManager.createRequestRoleIntent(BuildConfig.ROLE),
-          REQUEST_ROLE
-        )
-        return true
-      }
-      item.itemId == R.id.refresh -> viewModel.refresh()
+    when (item.itemId) {
+      R.id.refresh -> viewModel.refresh()
+      R.id.openDoc -> startActivityForResult(
+        Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+          addCategory(Intent.CATEGORY_OPENABLE); type = "*/*"
+        },
+        REQUEST_DOC
+      )
+      R.id.openTree -> startActivityForResult(
+        Intent(Intent.ACTION_OPEN_DOCUMENT_TREE),
+        REQUEST_TREE
+      )
     }
 
     return super.onOptionsItemSelected(item)
@@ -91,148 +131,138 @@ class MainActivity : AbstractPermissionActivity() {
     resultCode: Int,
     data: Intent?
   ) {
-    if (requestCode == REQUEST_ROLE && resultCode == Activity.RESULT_OK) {
-      viewModel.refresh()
-      menuRequestRole?.isEnabled = allowRoleRequest()
+    if (resultCode == Activity.RESULT_OK) {
+      when (requestCode) {
+        REQUEST_DOC -> data?.data?.let { showDoc(it) }
+        REQUEST_TREE -> data?.data?.let { showTree(it) }
+      }
     }
   }
 
-  @TargetApi(Build.VERSION_CODES.Q)
-  private fun allowRoleRequest() = resources.getBoolean(R.bool.isQ)
-      && BuildConfig.ROLE != null
-      && roleManager.isRoleAvailable(BuildConfig.ROLE)
-      && !roleManager.isRoleHeld(BuildConfig.ROLE)
-}
+  private fun showDoc(uri: Uri) {
+    Toast.makeText(this, uri.toString(), Toast.LENGTH_LONG).show()
 
-private val TITLES = listOf(
-  R.string.title_internal_files,
-  R.string.title_external_files,
-  R.string.title_external_cache,
-  R.string.title_external_root,
-  R.string.title_external_music,
-  R.string.title_external_images,
-  R.string.title_external_videos,
-  R.string.title_external_downloads,
-  R.string.title_external_documents,
-  R.string.title_external_alarms,
-  R.string.title_external_dcim,
-  R.string.title_external_notifications,
-  R.string.title_external_podcasts,
-  R.string.title_external_ringtones,
-  R.string.title_media_music,
-  R.string.title_media_images,
-  R.string.title_media_videos,
-  R.string.title_media_files
-)
+    Log.d(tag, "Uri = $uri")
 
-private const val MIME_TYPE_TEXT = "text/plain"
-private const val MIME_TYPE_AUDIO = "audio/mpeg"
-private const val MIME_TYPE_IMAGE = "image/png"
-private const val MIME_TYPE_VIDEO = "video/mp4"
+    val docFile = DocumentFile.fromSingleUri(this, uri)
 
-private class Pages(private val ctxt: Context, fm: FragmentManager) :
-  FragmentPagerAdapter(fm) {
+    docFile?.let {
+      Log.d(tag, "Display name = ${docFile.name}")
+      Log.d(tag, "Size = ${docFile.length()}")
+      Log.d(tag, "MIME type = ${docFile.type}")
+    }
+  }
 
-  override fun getCount() = 18
+  private fun showTree(uri: Uri) {
+    Toast.makeText(this, uri.toString(), Toast.LENGTH_LONG).show()
 
-  override fun getItem(position: Int) = when (position) {
-    0 -> StorageFragment(
+    val docFile = DocumentFile.fromTreeUri(this, uri)
+
+    docFile?.let {
+      Log.d(tag, "Display name = ${docFile.name}")
+      Log.d(tag, "# of children = ${docFile.listFiles().size}")
+    }
+  }
+
+  private fun navTo(itemId: Int) {
+    supportFragmentManager.transaction {
+      replace(
+        R.id.frame,
+        fragments.getOrElse(itemId) { createFragment(itemId) })
+    }
+  }
+
+  private fun createFragment(itemId: Int) = when (itemId) {
+    R.id.nav_internal_files -> StorageFragment(
       StorageScenario.INTERNAL_FILES,
       ASSET_TEXT,
       MIME_TYPE_TEXT
     )
-    1 -> StorageFragment(
+    R.id.nav_external_files -> StorageFragment(
       StorageScenario.EXTERNAL_FILES,
       ASSET_TEXT,
       MIME_TYPE_TEXT
     )
-    2 -> StorageFragment(
+    R.id.nav_external_cache -> StorageFragment(
       StorageScenario.EXTERNAL_CACHE,
       ASSET_TEXT,
       MIME_TYPE_TEXT
     )
-    3 -> StorageFragment(
+    R.id.nav_external_root -> StorageFragment(
       StorageScenario.EXTERNAL_ROOT,
       ASSET_TEXT,
       MIME_TYPE_TEXT
     )
-    4 -> StorageFragment(
+    R.id.nav_external_music -> StorageFragment(
       StorageScenario.EXTERNAL_MUSIC,
       ASSET_AUDIO,
       MIME_TYPE_AUDIO
     )
-    5 -> StorageFragment(
+    R.id.nav_external_images -> StorageFragment(
       StorageScenario.EXTERNAL_IMAGES,
       ASSET_IMAGE,
       MIME_TYPE_IMAGE
     )
-    6 -> StorageFragment(
+    R.id.nav_external_videos -> StorageFragment(
       StorageScenario.EXTERNAL_VIDEOS,
       ASSET_VIDEO,
       MIME_TYPE_VIDEO
     )
-    7 -> StorageFragment(
+    R.id.nav_external_downloads -> StorageFragment(
       StorageScenario.EXTERNAL_DOWNLOADS,
       ASSET_TEXT,
       MIME_TYPE_TEXT
     )
-    8 -> StorageFragment(
+    R.id.nav_external_documents -> StorageFragment(
       StorageScenario.EXTERNAL_DOCUMENTS,
       ASSET_TEXT,
       MIME_TYPE_TEXT
     )
-    9 -> StorageFragment(
+    R.id.nav_external_alarms -> StorageFragment(
       StorageScenario.EXTERNAL_ALARMS,
       ASSET_TEXT,
       MIME_TYPE_TEXT
     )
-    10 -> StorageFragment(
+    R.id.nav_external_dcim -> StorageFragment(
       StorageScenario.EXTERNAL_DCIM,
       ASSET_TEXT,
       MIME_TYPE_TEXT
     )
-    11 -> StorageFragment(
+    R.id.nav_external_notifications -> StorageFragment(
       StorageScenario.EXTERNAL_NOTIFICATIONS,
       ASSET_TEXT,
       MIME_TYPE_TEXT
     )
-    12 -> StorageFragment(
+    R.id.nav_external_podcasts -> StorageFragment(
       StorageScenario.EXTERNAL_PODCASTS,
       ASSET_TEXT,
       MIME_TYPE_TEXT
     )
-    13 -> StorageFragment(
+    R.id.nav_external_ringtones -> StorageFragment(
       StorageScenario.EXTERNAL_RINGTONES,
       ASSET_TEXT,
       MIME_TYPE_TEXT
     )
-    14 -> StorageFragment(
-      StorageScenario.EXTERNAL_DOCUMENTS,
-      ASSET_TEXT,
-      MIME_TYPE_TEXT
-    )
-    15 -> StorageFragment(
+    R.id.nav_media_music -> StorageFragment(
       StorageScenario.MEDIA_MUSIC,
       ASSET_AUDIO,
       MIME_TYPE_AUDIO
     )
-    16 -> StorageFragment(
+    R.id.nav_media_images -> StorageFragment(
       StorageScenario.MEDIA_IMAGES,
       ASSET_IMAGE,
       MIME_TYPE_IMAGE
     )
-    17 -> StorageFragment(
+    R.id.nav_media_videos -> StorageFragment(
       StorageScenario.MEDIA_VIDEOS,
       ASSET_VIDEO,
       MIME_TYPE_VIDEO
     )
-    else -> StorageFragment(
+    R.id.nav_media_files -> StorageFragment(
       StorageScenario.MEDIA_FILES,
       ASSET_TEXT,
       MIME_TYPE_TEXT
     )
+    else -> throw IllegalArgumentException("Do not recognize $itemId for fragment")
   }
-
-  override fun getPageTitle(position: Int): String =
-    ctxt.getString(TITLES[position])
 }

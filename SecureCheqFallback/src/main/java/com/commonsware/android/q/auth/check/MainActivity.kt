@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
       .setSubtitle("This is the subtitle")
       .apply {
         if (BuildCompat.isAtLeastQ()) {
-          setAllowDeviceCredential(true)
+          setDeviceCredentialAllowed(true)
         } else {
           setNegativeButton(
             "Ick!",

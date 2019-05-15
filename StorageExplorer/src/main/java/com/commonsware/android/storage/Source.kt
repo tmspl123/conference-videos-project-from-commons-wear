@@ -53,16 +53,19 @@ class ContentSource(
 ) :
   IStorageSource {
   companion object {
-    fun on(ctxt: Context, file: File) =
-      ContentSource(ctxt, DocumentFile.fromFile(file))
+    fun on(ctxt: Context, dir: File): ContentSource {
+      dir.mkdirs()
 
-    fun onPublic(ctxt: Context, loc: String) =
-      ContentSource(
-        ctxt,
-        DocumentFile.fromFile(
-          Environment.getExternalStoragePublicDirectory(loc)
-        )
-      )
+      return ContentSource(ctxt, DocumentFile.fromFile(dir))
+    }
+
+    fun onPublic(ctxt: Context, loc: String): ContentSource {
+      val dir = Environment.getExternalStoragePublicDirectory(loc)
+
+      dir.mkdirs()
+
+      return ContentSource(ctxt, DocumentFile.fromFile(dir))
+    }
   }
 
   override val supportsDirectory = true

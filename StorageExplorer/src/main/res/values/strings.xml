@@ -24,4 +24,8 @@
   <string name="menu_create">Create</string>
   <string name="menu_refresh">Refresh</string>
   <string name="menu_create_folder">Create Folder</string>
+  <string name="navigation_drawer_open">Open navigation drawer</string>
+  <string name="navigation_drawer_close">Close navigation drawer</string>
+  <string name="menu_open_doc">Open Document</string>
+  <string name="menu_open_tree">Open Tree</string>
 </resources>

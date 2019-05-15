@@ -58,8 +58,8 @@ class MainActivity : AppCompatActivity() {
       .setTitle("This is the title")
       .setDescription("This is the description")
       .setSubtitle("This is the subtitle")
-      .setRequireConfirmation(true)
-      .setAllowDeviceCredential(true)
+      .setConfirmationRequired(true)
+      .setDeviceCredentialAllowed(true)
       .build()
 
     fingerprint.apply {
