@@ -3,12 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-  compileSdkVersion 'android-Q'
+  compileSdkVersion 29
 
   defaultConfig {
     applicationId "com.commonsware.android.q.loc.fg"
     minSdkVersion 26
-    targetSdkVersion 'Q'
+    targetSdkVersion 29
     versionCode 1
     versionName "1.0"
   }

@@ -3,12 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-  compileSdkVersion 'android-Q'
+  compileSdkVersion 29
 
   defaultConfig {
     applicationId "com.commonsware.android.q.bubbleslice"
-    minSdkVersion 'Q'
-    targetSdkVersion 'Q'
+    minSdkVersion 29
+    targetSdkVersion 29
     versionCode 1
     versionName "1.0"
   }

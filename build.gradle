@@ -8,14 +8,10 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.4.0'
+    classpath 'com.android.tools.build:gradle:3.4.1'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
   }
-
-    
-
-
 }
 
 allprojects {
@@ -38,7 +34,7 @@ ext {
   koin_version = "1.0.2"
   lifecycle_version = "2.1.0-alpha04"
   recyclerview_version = "1.0.0"
-  sharetarget_version = "1.0.0-alpha01"
+  sharetarget_version = "1.0.0-alpha02"
   slice_version = "1.0.0"
   viewpager_version = "1.0.0"
   work_version = "2.0.1"
