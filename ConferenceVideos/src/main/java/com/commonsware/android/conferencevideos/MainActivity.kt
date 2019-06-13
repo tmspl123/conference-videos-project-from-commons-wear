@@ -18,11 +18,11 @@ package com.commonsware.android.conferencevideos
 
 import android.Manifest
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.BuildCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
 import com.commonsware.android.conferencevideos.databinding.RowBinding
@@ -32,8 +32,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : AbstractPermissionActivity() {
   private val motor: MainMotor by viewModel()
 
-  override val desiredPermissions = if (BuildCompat.isAtLeastQ()) arrayOf()
-  else arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+  override val desiredPermissions =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) arrayOf()
+    else arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
   override fun onPermissionDenied() {
     Toast.makeText(this, getString(R.string.msg_toast), Toast.LENGTH_LONG)

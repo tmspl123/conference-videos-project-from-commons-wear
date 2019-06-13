@@ -21,10 +21,10 @@ import android.content.ContentValues
 import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
-import androidx.core.os.BuildCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -40,7 +40,7 @@ private const val AUTHORITY = "${BuildConfig.APPLICATION_ID}.provider"
 class VideoRepository(private val context: Context) {
   private val ok = OkHttpClient()
   private val collection =
-    if (BuildCompat.isAtLeastQ()) MediaStore.Video.Media.getContentUri(
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) MediaStore.Video.Media.getContentUri(
       MediaStore.VOLUME_EXTERNAL
     ) else MediaStore.Video.Media.EXTERNAL_CONTENT_URI
 
@@ -63,7 +63,7 @@ class VideoRepository(private val context: Context) {
     }
 
   suspend fun download(filename: String): Uri =
-    if (BuildCompat.isAtLeastQ()) downloadQ(filename)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) downloadQ(filename)
     else downloadLegacy(filename)
 
   private suspend fun downloadQ(filename: String): Uri =
@@ -74,6 +74,7 @@ class VideoRepository(private val context: Context) {
       if (response.isSuccessful) {
         val values = ContentValues().apply {
           put(MediaStore.Video.Media.DISPLAY_NAME, filename)
+          put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/ConferenceVideos")
           put(MediaStore.Video.Media.MIME_TYPE, "video/mp4")
           put(MediaStore.Video.Media.IS_PENDING, 1)
         }

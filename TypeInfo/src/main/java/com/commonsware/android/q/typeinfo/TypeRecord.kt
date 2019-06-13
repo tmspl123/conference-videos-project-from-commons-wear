@@ -25,7 +25,7 @@ data class TypeRecord(
   val description: CharSequence,
   val icon: Icon
 ) {
-  constructor(type: String, typeInfo: ContentResolver.TypeInfo) : this(
+  constructor(type: String, typeInfo: ContentResolver.MimeTypeInfo) : this(
     type,
     typeInfo.label,
     typeInfo.contentDescription,

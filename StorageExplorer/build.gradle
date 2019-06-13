@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion "android-Q"
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.commonsware.android.storage"
@@ -21,7 +21,7 @@ android {
         }
     }
 
-    flavorDimensions "target", "perm", "sandbox"
+    flavorDimensions "target", "perm", "legacy"
 
     productFlavors {
         p {
@@ -32,8 +32,8 @@ android {
         q {
             dimension "target"
             applicationIdSuffix ".q"
-            minSdkVersion "Q"
-            targetSdkVersion "Q"
+            minSdkVersion 29
+            targetSdkVersion 29
         }
 
         perm {
@@ -48,16 +48,16 @@ android {
             buildConfigField "boolean", "REQUEST_RUNTIME_PERMISSIONS", "false"
         }
 
-        sandbox {
-            dimension "sandbox"
-            applicationIdSuffix ".sandbox"
-            resValue "bool", "useSandbox", "true"
+        normal {
+            dimension "legacy"
+            applicationIdSuffix ".normal"
+            resValue "bool", "useLegacy", "false"
         }
 
-        normal {
-            dimension "sandbox"
-            applicationIdSuffix ".normal"
-            resValue "bool", "useSandbox", "false"
+        legacy {
+            dimension "legacy"
+            applicationIdSuffix ".legacy"
+            resValue "bool", "useLegacy", "true"
         }
     }
 }

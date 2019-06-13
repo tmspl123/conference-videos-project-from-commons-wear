@@ -23,12 +23,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.hardware.biometrics.BiometricPrompt
+import android.os.Build
 import android.os.Bundle
 import android.os.CancellationSignal
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.os.BuildCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
       .setDescription("This is the description")
       .setSubtitle("This is the subtitle")
       .apply {
-        if (BuildCompat.isAtLeastQ()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
           setDeviceCredentialAllowed(true)
         } else {
           setNegativeButton(

@@ -27,7 +27,7 @@
 
       <meta-data
         android:name="android.app.shortcuts"
-        android:resource="@xml/shortcuts" />
+        android:resource="@xml/share_targets" />
     </activity>
     <activity android:name=".ShareActivity">
       <intent-filter>

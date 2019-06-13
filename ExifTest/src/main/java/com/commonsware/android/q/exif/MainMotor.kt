@@ -19,9 +19,9 @@ package com.commonsware.android.q.exif
 import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import androidx.core.os.BuildCompat
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -45,7 +45,7 @@ class MainMotor(private val context: Context) : ViewModel() {
   private val _countEvents = MutableLiveData<Event<Int>>()
   val countEvents: LiveData<Event<Int>> = _countEvents
   private val collection =
-    if (BuildCompat.isAtLeastQ()) MediaStore.Images.Media.getContentUri(
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) MediaStore.Images.Media.getContentUri(
       MediaStore.VOLUME_EXTERNAL
     ) else MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 

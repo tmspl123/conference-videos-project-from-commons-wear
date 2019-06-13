@@ -28,7 +28,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.core.os.BuildCompat
 import androidx.core.view.GravityCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.drawerlayout.widget.DrawerLayout
@@ -88,9 +87,9 @@ class MainActivity : AbstractPermissionActivity() {
     navTo(R.id.nav_internal_files)
 
     val msg =
-      if (BuildCompat.isAtLeastQ() && Environment.isExternalStorageSandboxed())
-        "This app has sandboxed external storage"
-      else "This app has normal external storage"
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && Environment.isExternalStorageLegacy())
+        "This app has legacy external storage"
+      else "This app has Q-normal external storage"
 
     Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
   }

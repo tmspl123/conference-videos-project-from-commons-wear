@@ -20,14 +20,13 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.BuildCompat
 import androidx.databinding.DataBindingUtil
-import com.commonsware.android.q.exif.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val REQUEST_OPEN = 1337
@@ -103,7 +102,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun requestMediaPerm() {
-    val perms = if (BuildCompat.isAtLeastQ()) {
+    val perms = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       arrayOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.ACCESS_MEDIA_LOCATION
