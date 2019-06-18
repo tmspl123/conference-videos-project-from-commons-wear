@@ -5,7 +5,7 @@
 
     <variable
       name="type"
-      type="com.commonsware.android.q.typeinfo.TypeRecord" />
+      type="com.commonsware.android.q.typeinfo.RowState" />
   </data>
 
   <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"

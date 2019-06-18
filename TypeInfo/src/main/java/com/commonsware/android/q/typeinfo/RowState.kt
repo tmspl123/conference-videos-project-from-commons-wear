@@ -19,7 +19,7 @@ package com.commonsware.android.q.typeinfo
 import android.content.ContentResolver
 import android.graphics.drawable.Icon
 
-data class TypeRecord(
+data class RowState(
   val type: String,
   val label: CharSequence,
   val description: CharSequence,

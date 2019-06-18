@@ -21,6 +21,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -93,21 +94,44 @@ private val MIME_TYPES = listOf(
   "rutabaga/marshmallow"
 )
 
-class TypeInfoViewModel(context: Context) : ViewModel() {
-  private val _types = MutableLiveData<List<TypeRecord>>()
-  val types: LiveData<List<TypeRecord>> = _types
+enum class ThemeMode {
+  LIGHT, DARK, SYSTEM
+}
+
+private const val PREF_THEME_MODE = "themeMode"
+
+class MainMotor(context: Context) : ViewModel() {
+  private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+  private val _states = MutableLiveData<MainViewState>()
+  val states: LiveData<MainViewState> = _states
 
   init {
-    viewModelScope.launch { _types.postValue(mapTypes(context)) }
+    viewModelScope.launch(Dispatchers.Main) {
+      _states.postValue(
+        MainViewState(
+          mapTypes(context),
+          loadInitialThemeMode()
+        )
+      )
+    }
   }
 
-  private suspend fun mapTypes(context: Context): List<TypeRecord> {
-    return withContext(Dispatchers.Default) {
+  fun setThemeMode(mode: ThemeMode) {
+    prefs.edit().putString(PREF_THEME_MODE, mode.name).apply()
+    _states.value?.let { _states.value = it.copy(themeMode = mode) }
+  }
+
+  private suspend fun loadInitialThemeMode() = withContext(Dispatchers.IO) {
+    prefs.getString(PREF_THEME_MODE, null)?.let { ThemeMode.valueOf(it) }
+      ?: ThemeMode.SYSTEM
+  }
+
+  private suspend fun mapTypes(context: Context) =
+    withContext(Dispatchers.Default) {
       val resolver = context.contentResolver
 
       MIME_TYPES
-        .map { TypeRecord(it, resolver.getTypeInfo(it)) }
+        .map { RowState(it, resolver.getTypeInfo(it)) }
         .sortedBy { it.description.toString() }
     }
-  }
 }

@@ -16,20 +16,7 @@
 
 package com.commonsware.android.q.typeinfo
 
-import android.app.Application
-import org.koin.android.ext.android.startKoin
-import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.ext.koin.viewModel
-import org.koin.dsl.module.module
-
-private val KOIN_MODULE = module {
-  viewModel { MainMotor(androidContext()) }
-}
-
-class KoinApp : Application() {
-  override fun onCreate() {
-    super.onCreate()
-
-    startKoin(this, listOf(KOIN_MODULE))
-  }
-}
+data class MainViewState(
+  val types: List<RowState>,
+  val themeMode: ThemeMode
+)

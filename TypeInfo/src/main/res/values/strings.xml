@@ -1,4 +1,7 @@
 <resources>
   <string name="app_name">TypeInfo</string>
   <string name="icon">icon</string>
+  <string name="menu_light">Light</string>
+  <string name="menu_dark">Dark</string>
+  <string name="menu_system">System</string>
 </resources>

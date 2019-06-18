@@ -18,8 +18,11 @@ package com.commonsware.android.q.typeinfo
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +32,11 @@ import com.commonsware.android.q.typeinfo.databinding.RowBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
-  private val vm: TypeInfoViewModel by viewModel()
+  private val motor: MainMotor by viewModel()
+  private lateinit var light: MenuItem
+  private lateinit var dark: MenuItem
+  private lateinit var system: MenuItem
+  private lateinit var currentThemeMode: ThemeMode
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -41,11 +48,71 @@ class MainActivity : AppCompatActivity() {
     rv.layoutManager = LinearLayoutManager(this)
     rv.adapter = adapter
 
-    vm.types.observe(this) { types -> adapter.submitList(types) }
+    motor.states.observe(this) { state ->
+      adapter.submitList(state.types)
+
+      currentThemeMode = state.themeMode
+
+      if (::light.isInitialized) {
+        updateThemeMode(currentThemeMode)
+      }
+    }
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    menuInflater.inflate(R.menu.themes, menu)
+    light = menu.findItem(R.id.light)
+    dark = menu.findItem(R.id.dark)
+    system = menu.findItem(R.id.system)
+
+    if (::currentThemeMode.isInitialized) updateThemeMode(currentThemeMode)
+
+    return super.onCreateOptionsMenu(menu)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item) {
+      light -> {
+        light.isChecked = true
+        motor.setThemeMode(ThemeMode.LIGHT)
+        return true
+      }
+      dark -> {
+        dark.isChecked = true
+        motor.setThemeMode(ThemeMode.DARK)
+        return true
+      }
+      system -> {
+        system.isChecked = true
+        motor.setThemeMode(ThemeMode.SYSTEM)
+        return true
+      }
+    }
+
+    return super.onOptionsItemSelected(item)
+  }
+
+  private fun updateThemeMode(themeMode: ThemeMode) {
+    when (themeMode) {
+      ThemeMode.LIGHT -> {
+        light.isChecked = true
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+      }
+      ThemeMode.DARK -> {
+        dark.isChecked = true
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+      }
+      ThemeMode.SYSTEM -> {
+        system.isChecked = true
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+      }
+    }
   }
 }
 
-class TypeAdapter(private val inflater: LayoutInflater) : ListAdapter<TypeRecord, RowHolder>(TypeRecordDiffer) {
+class TypeAdapter(private val inflater: LayoutInflater) :
+  ListAdapter<RowState, RowHolder>(TypeRecordDiffer) {
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
     RowHolder(RowBinding.inflate(inflater, parent, false))
 
@@ -56,16 +123,16 @@ class TypeAdapter(private val inflater: LayoutInflater) : ListAdapter<TypeRecord
 
 class RowHolder(private val binding: RowBinding) :
   RecyclerView.ViewHolder(binding.root) {
-  fun bind(type: TypeRecord) {
+  fun bind(type: RowState) {
     binding.setType(type)
     binding.icon.setImageIcon(type.icon)
   }
 }
 
-object TypeRecordDiffer : DiffUtil.ItemCallback<TypeRecord>() {
-  override fun areItemsTheSame(oldItem: TypeRecord, newItem: TypeRecord) =
+object TypeRecordDiffer : DiffUtil.ItemCallback<RowState>() {
+  override fun areItemsTheSame(oldItem: RowState, newItem: RowState) =
     oldItem.type == newItem.type
 
-  override fun areContentsTheSame(oldItem: TypeRecord, newItem: TypeRecord) =
+  override fun areContentsTheSame(oldItem: RowState, newItem: RowState) =
     areItemsTheSame(oldItem, newItem)
 }
