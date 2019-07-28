@@ -1,2 +1,2 @@
-include ':StorageExplorer', ':ConditionalFile', ':PayAttention', ':SecureCheq', ':TypeInfo', ':BasicBubble', ':ShareSomething', ':ShareTargets', ':LocationForeground', ':ConferenceVideos',
+include ':StorageExplorer', ':ConditionalFile', ':PayAttention', ':SecureCheq', ':TypeInfo', ':BasicBubble', ':ShareSomething', ':ShareTargets', ':LocationForeground', ':ConferenceVideos', ':AppInstaller',
     ':SecureCheqFallback', ':SlicedBubble'

@@ -1,0 +1,5 @@
+<resources>
+  <string name="app_name">AppInstaller</string>
+  <string name="menu_open">Open</string>
+  <string name="message">Click the \"open\" toolbar button to pick an APK to install!</string>
+</resources>
