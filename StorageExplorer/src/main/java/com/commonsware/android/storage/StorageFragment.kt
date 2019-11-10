@@ -105,12 +105,12 @@ class StorageFragment : Fragment() {
     items.addItemDecoration(DividerItemDecoration(activity, manager.orientation))
     items.adapter = adapter
 
-    motor.states.observe(this) { state ->
+    motor.states.observe(viewLifecycleOwner) { state ->
       adapter.submitList(state.items)
       folderItem?.isVisible = state.supportsDirectory
     }
 
-    topViewModel.refreshEvents.observe(this) { event ->
+    topViewModel.refreshEvents.observe(viewLifecycleOwner) { event ->
       event.handle { motor.refresh() }
     }
 

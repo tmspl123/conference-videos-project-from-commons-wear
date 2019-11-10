@@ -84,9 +84,9 @@ abstract class AbstractPermissionActivity : AppCompatActivity() {
   }
 
   private fun hasAllPermissions(perms: Array<String>) =
-    perms.any { hasPermission(it) }
+    perms.all { hasPermission(it) }
 
-  protected fun hasPermission(perm: String) =
+  private fun hasPermission(perm: String) =
     ContextCompat.checkSelfPermission(
       this,
       perm
