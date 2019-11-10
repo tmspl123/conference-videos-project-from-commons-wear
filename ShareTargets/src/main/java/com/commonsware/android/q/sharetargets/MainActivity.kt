@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
           .setShortLabel(getString(tag.shortLabelRes))
           .setIcon(IconCompat.createWithResource(this, tag.iconRes))
           .setIntent(intent)
-          .setLongLived()
+          .setLongLived(true)
           .setCategories(SHARE_CATEGORIES)
           .build()
       })

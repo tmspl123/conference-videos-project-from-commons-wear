@@ -32,6 +32,7 @@ import androidx.core.view.GravityCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.transaction
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -164,7 +165,7 @@ class MainActivity : AbstractPermissionActivity() {
   }
 
   private fun navTo(itemId: Int) {
-    supportFragmentManager.transaction {
+    supportFragmentManager.commit {
       replace(
         R.id.frame,
         fragments.getOrElse(itemId) { createFragment(itemId) })

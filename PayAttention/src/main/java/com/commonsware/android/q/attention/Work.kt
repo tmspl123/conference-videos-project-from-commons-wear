@@ -61,6 +61,7 @@ class ShowNotificationWorker(
     val builder = NotificationCompat.Builder(appContext, CHANNEL_WHATEVER)
       .setSmallIcon(R.drawable.ic_notification)
       .setContentTitle("Um, hi!")
+      .setContentText("remove me")
       .setAutoCancel(true)
       .setPriority(NotificationCompat.PRIORITY_HIGH)
       .setFullScreenIntent(pi, true)
