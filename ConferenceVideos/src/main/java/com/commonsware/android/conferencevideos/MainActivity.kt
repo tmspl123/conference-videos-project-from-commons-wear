@@ -14,6 +14,8 @@
   https://commonsware.com/AndroidQ
 */
 
+// Explanation =>  https://commonsware.com/Q/pages/chap-media-003.html
+
 package com.commonsware.android.conferencevideos
 
 import android.Manifest

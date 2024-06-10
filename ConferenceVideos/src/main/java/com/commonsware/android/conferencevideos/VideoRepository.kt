@@ -128,4 +128,12 @@ class VideoRepository(private val context: Context) {
         throw RuntimeException("OkHttp failed for some reason")
       }
     }
+
+    /* However, we no longer have a Uri representing the video this way, and the indexing operation is
+       asynchronous. So, we settle for FileProvider to give us access in the short term. Future runs of
+       the app should see the content in the MediaStore and be able to use a MediaStore-supplied Uri to
+       work with it.
+    *
+        Also note that we use MediaScannerConnection.scanFile() in this scenario. That is not needed with downloadQ(), as we are directly putting the image into the MediaStore.
+    * */
 }
